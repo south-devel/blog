@@ -1,0 +1,1 @@
+{"data":{"minimalBlogConfig":{"basePath":"/","blogPath":"/posts","postsPath":"content/posts","pagesPath":"content/pages","tagsPath":"/tags","externalLinks":[{"name":"RSS","url":"https://south-devel.github.io/blog/rss.xml"}],"navigation":[{"title":"Posts","slug":"/posts"},{"title":"About","slug":"/about"}],"showLineNumbers":false,"showCopyButton":true}}}
