@@ -1,0 +1,3 @@
+User-agent: *
+
+sitemap: https://south-devel.github.io/blog/sitemap-index.xml

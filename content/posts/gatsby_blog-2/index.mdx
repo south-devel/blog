@@ -1,0 +1,63 @@
+---
+title: GatsbyJS와 Gitbub Pages를 이용한 블로그 만들기 - 2
+date: 2023-12-10
+tags:
+  - Frontend
+  - Github
+---
+
+지난 포스팅에서는 GatsbyJS의 gatsby-starter-minimal-blog 템플릿을 이용하여 블로그를 만들어보았다. 이번 포스팅에서는 Github Pages를 이용하여 블로그를 배포해보자.
+
+## 깃허브 페이지 설정
+깃허브 페이지를 이용하기 위해선 깃허브 계정이 필요하며 배포할 경우 경로는 `{계정명}.github.io/{레포명}`이나 `{계정명}.github.io/docs`가 된다.
+
+1. 블로그로 사용할 레포지토리를 생성하고, 레포지토리 이름 밑의 'Settings'를 클릭한다.
+2. 왼쪽 Pages 섹션에서 'Source'를 클릭하고, 'Deploy from a branch'를 선택한다.
+3. 아래 'Branch' 드롭다운에서 'main'을 선택하여 배포하거나, 배포용 브랜치를 따로 만들어서 배포할 수 있다. 이 블로그의 경우 'deploy' 브랜치를 생성하여 배포하였다.
+4. 배포대상 폴더는 'root'를 선택하고, 'Save'를 클릭한다.
+
+## `gh-pages` 설치
+`gh-pages`는 GitHub Pages 배포를 위한 패키지이다.
+이전에 만든 블로그 프로젝트 폴더로 이동하여 `gh-pages`를 설치한다.
+
+```bash
+npm install gh-pages --save-dev
+```
+
+## deploy 스크립트 추가
+- 경로 접두사가 있는 경로에 배포하기
+
+`{계정명}.github.io/{레포명}`와 같은 경로에 배포된 사이트의 경우, 웹사이트가 `{계정명}.github.io/{레포명}`와 같은 폴더 안에 들어가게 되므로 --prefix-paths 플래그가 필요하다.
+gatsby-config.js에 옵션으로 /reponame 경로 접두사를 추가해야 한다.
+
+Javascript의 경우는 아래와 같이 설정하면 된다.
+
+```js title=gatsby-config.js
+module.exports = {
+  pathPrefix: "/{레포명}",
+}
+```
+Typescript의 경우는 아래와 같이 설정하면 된다.
+
+```ts title=gatsby-config.ts
+const config: GatsbyConfig = {
+  pathPrefix: `/{레포명}`,
+  ...
+```
+
+- 배포 스크립트 추가
+그런 다음 리포지토리의 코드베이스에 있는 package.json에 배포 스크립트를 추가한다.  
+```json title=package.json
+{
+  "scripts": {
+    "deploy": "gatsby build --prefix-paths && gh-pages -d public"
+  }
+}
+```
+> 배포용 브랜치가 main이 아닐경우 -b deploy"를 추가하면 배포용 브랜치에 배포할 수 있다.
+
+## 배포하기
+`npm run deploy`를 실행하면 공개 폴더의 모든 콘텐츠가 리포지토리의 gh-pages 브랜치로 이동하고, GitHub Pages에 배포된다.
+> 배포까지 약 5분정도 소요된다.
+
+> 브라우저 캐시로인해 변경사항이 적용되지 않을 수 있으므로, 프라이빗 모드로 접속하거나 캐시를 삭제하고 접속해보자.
